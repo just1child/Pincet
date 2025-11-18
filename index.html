@@ -1,0 +1,2157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PINCETTE - 대학생과 함께하는 학습 커뮤니티</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #2a2a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-tertiary: #808080;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-blue: #3b82f6;
+            --border-color: #333333;
+            --hover-bg: #2a2a2a;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Left Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 24px 20px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .nav-item:hover {
+            background: var(--hover-bg);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--hover-bg);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 32px 0 16px 0;
+            padding: 0 16px;
+        }
+
+        .community-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .community-item:hover {
+            background: var(--hover-bg);
+        }
+
+        .community-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .community-name {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .service-shortcuts {
+            margin-top: 32px;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-secondary);
+        }
+
+        .service-item:hover {
+            background: var(--hover-bg);
+            color: var(--text-primary);
+        }
+
+        /* Main Content */
+        .main-container {
+            margin-left: 280px;
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        /* Top Profile Section */
+        .profile-section {
+            margin-bottom: 32px;
+        }
+
+        .profile-section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .profile-cards {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .profile-cards::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .profile-cards::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .profile-cards::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .profile-card {
+            min-width: 280px;
+            width: 280px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--accent-purple);
+            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.3);
+        }
+
+        .profile-image-container {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            position: relative;
+            background: var(--bg-tertiary);
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-card:hover .profile-image {
+            transform: scale(1.05);
+        }
+
+        .profile-online-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 12px;
+            height: 12px;
+            background: #10b981;
+            border: 3px solid var(--bg-secondary);
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-info {
+            padding: 20px;
+            background: var(--bg-secondary);
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .profile-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Chat and Video Section */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        /* Chat Section */
+        .chat-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-header-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .chat-header-more {
+            font-size: 14px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .chat-header-more:hover {
+            color: var(--text-primary);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-sender {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .message-text {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            display: inline-block;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .message.their-message .message-time {
+            text-align: left;
+        }
+
+        .chat-input-area {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 12px 20px;
+            color: var(--text-primary);
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .chat-input:focus {
+            border-color: var(--accent-purple);
+        }
+
+        .chat-send-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .chat-send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Video Section */
+        .video-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            height: 600px;
+        }
+
+        .video-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: #000;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+        }
+
+        .youtube-logo {
+            width: 80px;
+            height: 80px;
+            background: #ff0000;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .youtube-logo svg {
+            width: 50px;
+            height: 50px;
+        }
+
+        .video-placeholder-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .video-placeholder-subtext {
+            font-size: 14px;
+            color: var(--text-tertiary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-container {
+                margin-left: 0;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .video-section {
+                order: 2;
+            }
+
+            .chat-section {
+                order: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-cards {
+                gap: 12px;
+            }
+
+            .profile-card {
+                min-width: 200px;
+                width: 200px;
+            }
+
+            .profile-image-container {
+                height: 300px;
+            }
+
+            .profile-name {
+                font-size: 18px;
+            }
+
+            .profile-title {
+                font-size: 13px;
+            }
+
+            .chat-section,
+            .video-section {
+                height: 500px;
+            }
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.5);
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 44px;
+            height: 44px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            z-index: 1001;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            font-size: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .mobile-menu-toggle {
+                display: flex;
+            }
+        }
+
+        /* Smooth Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-card,
+        .message {
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* DM Modal */
+        .dm-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dm-modal.active {
+            display: flex;
+        }
+
+        .dm-modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .dm-modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .dm-modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: none;
+            color: var(--text-primary);
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .dm-modal-close:hover {
+            background: var(--hover-bg);
+        }
+
+        .dm-profile-section {
+            padding: 32px 24px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dm-profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            object-fit: cover;
+        }
+
+        .dm-profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .dm-profile-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .dm-price-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-tertiary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .dm-benefits-section {
+            padding: 24px;
+            background: var(--bg-tertiary);
+            margin: 24px;
+            border-radius: 16px;
+        }
+
+        .dm-benefits-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #10b981;
+        }
+
+        .dm-benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .dm-benefit-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .dm-benefit-check {
+            color: #10b981;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .dm-notice-section {
+            padding: 24px;
+        }
+
+        .dm-notice-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .dm-notice-item {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+            padding-left: 8px;
+        }
+
+        .dm-agree-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .dm-agree-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .dm-agree-checkbox label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .dm-action-button {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .dm-start-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dm-start-btn:hover {
+            background: var(--hover-bg);
+            border-color: var(--accent-purple);
+        }
+
+        .dm-start-btn.active {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border-color: transparent;
+        }
+
+        .dm-start-btn.active:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Profile Detail Modal */
+        .profile-detail-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        .profile-detail-modal.active {
+            display: flex;
+        }
+
+        .profile-detail-content {
+            background: var(--bg-primary);
+            width: 100%;
+            max-width: 500px;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .profile-detail-header {
+            position: relative;
+            width: 100%;
+            height: 60vh;
+            min-height: 400px;
+            overflow: hidden;
+        }
+
+        .profile-detail-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-detail-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .profile-detail-close:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .profile-detail-info {
+            background: var(--bg-secondary);
+            border-radius: 24px 24px 0 0;
+            margin-top: -24px;
+            padding: 32px 24px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .profile-detail-name {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .profile-detail-nickname {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .profile-detail-section {
+            margin-bottom: 32px;
+        }
+
+        .profile-detail-section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .profile-detail-section-icon {
+            font-size: 20px;
+        }
+
+        .profile-detail-text {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .profile-detail-info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .profile-detail-info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .profile-detail-interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .profile-detail-interest-tag {
+            background: var(--bg-tertiary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .profile-detail-dm-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 24px;
+        }
+
+        .profile-detail-dm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Chat List View */
+        .chat-list-view {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-list-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .chat-list-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .chat-list-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        .chat-list-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 8px;
+        }
+
+        .chat-list-item:hover {
+            background: var(--hover-bg);
+        }
+
+        .chat-list-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .chat-list-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chat-list-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .chat-list-preview {
+            font-size: 14px;
+            color: var(--text-secondary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .chat-list-time {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-left: auto;
+        }
+
+        .chat-list-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 40px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .chat-list-empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .chat-view {
+            display: none;
+        }
+
+        .chat-view.active {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* Message alignment */
+        .message.my-message {
+            flex-direction: row-reverse;
+        }
+
+        .message.my-message .message-content {
+            align-items: flex-end;
+        }
+
+        .message.my-message .message-text {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 18px 18px 4px 18px;
+        }
+
+        .message.their-message .message-text {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            padding: 12px 16px;
+            border-radius: 18px 18px 18px 4px;
+        }
+
+        .message.their-message .message-sender {
+            display: none;
+        }
+
+        /* Pin Shop Page */
+        .pin-shop-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .pin-shop-page.active {
+            display: block;
+        }
+
+        .pin-shop-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 40px;
+        }
+
+        .pin-shop-sidebar {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 32px 24px;
+            height: fit-content;
+        }
+
+        .pin-shop-sidebar-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 32px;
+        }
+
+        .my-pin-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .my-pin-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .my-pin-amount {
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .pin-info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .pin-info-label {
+            color: var(--text-secondary);
+        }
+
+        .pin-info-value {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .pin-shop-main {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+        }
+
+        .pin-shop-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pin-shop-nav-item {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 16px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .pin-shop-nav-item.active {
+            color: var(--text-primary);
+            border-bottom-color: var(--accent-purple);
+        }
+
+        .pin-shop-nav-item:hover {
+            color: var(--text-primary);
+        }
+
+        .pin-packages {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 24px;
+        }
+
+        .pin-package-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pin-package-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-purple);
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+        }
+
+        .pin-package-icons {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .pin-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .pin-package-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .pin-package-bonus {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .pin-package-price {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .pin-package-benefit {
+            font-size: 12px;
+            color: #ef4444;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <div class="mobile-menu-toggle" onclick="toggleSidebar()">
+        ☰
+    </div>
+
+    <!-- Left Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo">
+            <div class="logo-text">PINCETTE</div>
+        </div>
+
+        <div class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <span>홈</span>
+        </div>
+
+        <div class="nav-item">
+            <div class="nav-icon">⋯</div>
+            <span>더보기</span>
+        </div>
+
+        <div class="section-title">My Pacemaker</div>
+
+
+        <div class="community-item" onclick="selectProfile('준형')">
+            <div class="community-avatar" style="background: linear-gradient(135deg, #8b5cf6, #3b82f6);">준</div>
+            <div class="community-name">준형 선배</div>
+        </div>
+
+        <div class="community-item" onclick="selectProfile('민석')">
+            <div class="community-avatar" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);">민</div>
+            <div class="community-name">민석 선배</div>
+        </div>
+
+        <div class="community-item" onclick="selectProfile('슬기')">
+            <div class="community-avatar" style="background: linear-gradient(135deg, #3b82f6, #10b981);">슬</div>
+            <div class="community-name">슬기 선배</div>
+        </div>
+
+        <div class="section-title">서비스 바로가기</div>
+
+        <div class="service-item" onclick="openPinShop()">
+            <div class="nav-icon">💎</div>
+            <span>Pin Shop</span>
+        </div>
+
+        <div class="service-item" style="margin-top: auto; padding-top: 24px; border-top: 1px solid var(--border-color);" onclick="openMyPin()">
+            <div class="nav-icon">✨</div>
+            <span>My Pin</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Profile Section -->
+        <div class="profile-section">
+            <h2 class="profile-section-title">Pincette Pacemaker</h2>
+            <div class="profile-cards">
+                <!-- 준형 선배: 한국 대학생 스타일 -->
+                <div class="profile-card" onclick="openProfileDetail('준형')">
+                    <div class="profile-image-container">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=600&fit=crop&q=80" alt="준형 선배" class="profile-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22600%22%3E%3Crect fill=%22%232a2a2a%22 width=%22400%22 height=%22600%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23b3b3b3%22 font-size=%2224%22%3E준형 선배%3C/text%3E%3C/svg%3E'">
+                        <div class="profile-online-badge"></div>
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-name">준형 선배</div>
+                        <div class="profile-title">서울대 치의학과</div>
+                    </div>
+                </div>
+
+                <!-- 민석 선배: 한국 대학생 스타일 -->
+                <div class="profile-card" onclick="openProfileDetail('민석')">
+                    <div class="profile-image-container">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=600&fit=crop&q=80" alt="민석 선배" class="profile-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22600%22%3E%3Crect fill=%22%232a2a2a%22 width=%22400%22 height=%22600%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23b3b3b3%22 font-size=%2224%22%3E민석 선배%3C/text%3E%3C/svg%3E'">
+                        <div class="profile-online-badge"></div>
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-name">민석 선배</div>
+                        <div class="profile-title">서울대 치의학과</div>
+                    </div>
+                </div>
+
+                <!-- 슬기 선배: 한국 대학생 스타일 -->
+                <div class="profile-card" onclick="openProfileDetail('슬기')">
+                    <div class="profile-image-container">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=600&fit=crop&q=80" alt="슬기 선배" class="profile-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22600%22%3E%3Crect fill=%22%232a2a2a%22 width=%22400%22 height=%22600%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23b3b3b3%22 font-size=%2224%22%3E슬기 선배%3C/text%3E%3C/svg%3E'">
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-name">슬기 선배</div>
+                        <div class="profile-title">고려대 심리학과</div>
+                    </div>
+                </div>
+
+                <!-- 지훈 선배: 한국 대학생 스타일 (구독 안함) -->
+                <div class="profile-card" onclick="openProfileDetail('지훈')">
+                    <div class="profile-image-container">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop&q=80" alt="지훈 선배" class="profile-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22600%22%3E%3Crect fill=%22%232a2a2a%22 width=%22400%22 height=%22600%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23b3b3b3%22 font-size=%2224%22%3E지훈 선배%3C/text%3E%3C/svg%3E'">
+                        <div class="profile-online-badge"></div>
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-name">지훈 선배</div>
+                        <div class="profile-title">서울대 의예과</div>
+                    </div>
+                </div>
+
+                <!-- 수진 선배: 한국 대학생 스타일 (구독 안함) -->
+                <div class="profile-card" onclick="openProfileDetail('수진')">
+                    <div class="profile-image-container">
+                        <img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&h=600&fit=crop&q=80" alt="수진 선배" class="profile-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22600%22%3E%3Crect fill=%22%232a2a2a%22 width=%22400%22 height=%22600%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23b3b3b3%22 font-size=%2224%22%3E수진 선배%3C/text%3E%3C/svg%3E'">
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-name">수진 선배</div>
+                        <div class="profile-title">이화여대 교육학과</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat and Video Section -->
+        <div class="content-grid">
+            <!-- Chat Section -->
+            <div class="chat-section">
+                <!-- Chat List View -->
+                <div class="chat-list-view" id="chatListView">
+                    <div class="chat-list-header">
+                        <div class="chat-list-title">Chats</div>
+                    </div>
+                    <div class="chat-list-items" id="chatListItems">
+                        <!-- 채팅방 리스트가 여기에 동적으로 생성됩니다 -->
+                    </div>
+                </div>
+
+                <!-- Chat View -->
+                <div class="chat-view" id="chatView">
+                    <div class="chat-header">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <button onclick="backToChatList()" style="background: none; border: none; color: var(--text-primary); font-size: 20px; cursor: pointer; padding: 4px;">←</button>
+                            <div class="chat-header-title" id="chatViewTitle">Chats</div>
+                        </div>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- 채팅 메시지가 여기에 표시됩니다 -->
+                    </div>
+
+                    <div class="chat-input-area">
+                        <input type="text" class="chat-input" placeholder="메시지를 입력하세요..." id="chatInput" onkeypress="handleKeyPress(event)">
+                        <button class="chat-send-btn" onclick="sendMessage()">➤</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Section -->
+            <div class="video-section">
+                <div class="video-container">
+                    <div class="video-placeholder">
+                        <div class="youtube-logo">
+                            <svg viewBox="0 0 24 24" fill="white">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                        </div>
+                        <div class="video-placeholder-text">PINCETTE YouTube</div>
+                        <div class="video-placeholder-subtext">지극히 평범한 대학생들의 일상 기록, 라이브 스트리밍</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button class="fab" onclick="scrollToTop()">↑</button>
+
+    <!-- Profile Detail Modal -->
+    <div class="profile-detail-modal" id="profileDetailModal">
+        <div class="profile-detail-content">
+            <div class="profile-detail-header">
+                <img src="" alt="" class="profile-detail-image" id="profileDetailImage">
+                <button class="profile-detail-close" onclick="closeProfileDetail()">×</button>
+            </div>
+            <div class="profile-detail-info">
+                <div class="profile-detail-name" id="profileDetailName"></div>
+                <div class="profile-detail-nickname" id="profileDetailNickname"></div>
+
+                <div class="profile-detail-section">
+                    <div class="profile-detail-section-title">
+                        <span class="profile-detail-section-icon">✏️</span>
+                        <span>자기소개</span>
+                    </div>
+                    <div class="profile-detail-text" id="profileDetailIntro"></div>
+                </div>
+
+                <div class="profile-detail-section">
+                    <div class="profile-detail-section-title">
+                        <span class="profile-detail-section-icon">✓</span>
+                        <span>기본정보</span>
+                    </div>
+                    <div class="profile-detail-info-item">
+                        <span>🎓</span>
+                        <span id="profileDetailSchool"></span>
+                    </div>
+                    <div class="profile-detail-info-item">
+                        <span>📱</span>
+                        <span id="profileDetailInstagram"></span>
+                    </div>
+                </div>
+
+                <div class="profile-detail-section">
+                    <div class="profile-detail-section-title">
+                        <span class="profile-detail-section-icon">❤️</span>
+                        <span>관심사</span>
+                    </div>
+                    <div class="profile-detail-interests" id="profileDetailInterests"></div>
+                </div>
+
+                <button class="profile-detail-dm-btn" id="profileDetailDMBtn" onclick="openDMFromProfile()" style="display: none;">DM 시작하기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pin Shop Page -->
+    <div class="pin-shop-page" id="pinShopPage">
+        <div class="pin-shop-container">
+            <div class="pin-shop-sidebar">
+                <div class="pin-shop-sidebar-title">Pin Shop</div>
+                <div class="my-pin-section">
+                    <div class="my-pin-icon">P</div>
+                    <div class="my-pin-amount">0</div>
+                </div>
+                <div class="pin-info-item">
+                    <span class="pin-info-label">충전Pin</span>
+                    <span class="pin-info-value">0</span>
+                </div>
+                <div class="pin-info-item">
+                    <span class="pin-info-label">적립Pin</span>
+                    <span class="pin-info-value">0</span>
+                </div>
+                <div class="pin-info-item">
+                    <span class="pin-info-label">충전한도</span>
+                    <span class="pin-info-value">1,500</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 8px;">최대 1,500</div>
+            </div>
+            <div class="pin-shop-main">
+                <div class="pin-shop-nav">
+                    <button class="pin-shop-nav-item" onclick="switchPinTab('intro')">소개</button>
+                    <button class="pin-shop-nav-item active" onclick="switchPinTab('general')">일반 충전</button>
+                    <button class="pin-shop-nav-item" onclick="switchPinTab('auto')">자동 충전</button>
+                    <button class="pin-shop-nav-item" onclick="switchPinTab('inquiry')">조회</button>
+                    <button class="pin-shop-nav-item" onclick="switchPinTab('faq')">FAQ</button>
+                </div>
+                <div id="pinShopContent">
+                    <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 32px;">일반 충전</h2>
+                    <div class="pin-packages">
+                        <div class="pin-package-card" onclick="purchasePin(4, 1200)">
+                            <div class="pin-package-icons">
+                                <div class="pin-icon">P</div>
+                            </div>
+                            <div class="pin-package-name">Pin 4</div>
+                            <div class="pin-package-price">₩1,200</div>
+                        </div>
+                        <div class="pin-package-card" onclick="purchasePin(8, 2400)">
+                            <div class="pin-package-icons">
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                            </div>
+                            <div class="pin-package-name">Pin 8</div>
+                            <div class="pin-package-price">₩2,400</div>
+                        </div>
+                        <div class="pin-package-card" onclick="purchasePin(20, 6000)">
+                            <div class="pin-package-icons">
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                            </div>
+                            <div class="pin-package-name">Pin 20</div>
+                            <div class="pin-package-bonus">적립Pin 1</div>
+                            <div class="pin-package-price">₩6,000</div>
+                            <div class="pin-package-benefit">5% 혜택</div>
+                        </div>
+                        <div class="pin-package-card" onclick="purchasePin(40, 12000)">
+                            <div class="pin-package-icons">
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                            </div>
+                            <div class="pin-package-name">Pin 40</div>
+                            <div class="pin-package-bonus">적립Pin 3</div>
+                            <div class="pin-package-price">₩12,000</div>
+                            <div class="pin-package-benefit">7% 혜택</div>
+                        </div>
+                        <div class="pin-package-card" onclick="purchasePin(60, 18000)">
+                            <div class="pin-package-icons">
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                            </div>
+                            <div class="pin-package-name">Pin 60</div>
+                            <div class="pin-package-bonus">적립Pin 5</div>
+                            <div class="pin-package-price">₩18,000</div>
+                            <div class="pin-package-benefit">8% 혜택</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="position: fixed; top: 20px; right: 20px;">
+            <button onclick="closePinShop()" style="width: 40px; height: 40px; border-radius: 50%; background: var(--bg-tertiary); border: none; color: var(--text-primary); font-size: 24px; cursor: pointer;">×</button>
+        </div>
+    </div>
+
+    <!-- DM Modal -->
+    <div class="dm-modal" id="dmModal">
+        <div class="dm-modal-content">
+            <div class="dm-modal-header">
+                <div></div>
+                <button class="dm-modal-close" onclick="closeDM()">×</button>
+            </div>
+            
+            <div class="dm-profile-section">
+                <img src="" alt="" class="dm-profile-avatar" id="dmProfileAvatar">
+                <div class="dm-profile-name" id="dmProfileName"></div>
+                <div class="dm-profile-subtitle" id="dmProfileSubtitle">월 구독 DM</div>
+                <div class="dm-price-tag">
+                    <span>💎</span>
+                    <span id="dmPrice">15/월</span>
+                </div>
+            </div>
+
+            <div class="dm-benefits-section">
+                <div class="dm-benefits-title">Web 한정 혜택</div>
+                <div class="dm-benefit-item">
+                    <span class="dm-benefit-check">✓</span>
+                    <span>편리한 자동 결제로 월 구독 DM 이용 가능</span>
+                </div>
+                <div class="dm-benefit-item">
+                    <span class="dm-benefit-check">✓</span>
+                    <span>WEB 월 구독 시에만 제공되는 젤리 할인 혜택!</span>
+                </div>
+            </div>
+
+            <div class="dm-notice-section">
+                <div class="dm-notice-title">유의 사항</div>
+                <div class="dm-notice-item">
+                    • 구독 기간 동안 Pacemaker의 메시지를 수신하고, Pacemaker에게 메시지를 보낼 수 있습니다.
+                </div>
+                <div class="dm-notice-item">
+                    • 해당 Pacemaker의 DM 오픈 후 30일 내에 DM을 구독하면 3개월 간 매월 추가 구독 기간 6일이 지급됩니다.
+                </div>
+            </div>
+
+            <div class="dm-agree-checkbox">
+                <input type="checkbox" id="dmAgree" onchange="toggleDMButton()">
+                <label for="dmAgree">유의사항을 확인하였으며 해당 내용에 동의합니다.</label>
+            </div>
+
+            <div class="dm-action-button">
+                <button class="dm-start-btn" id="dmStartBtn" onclick="startDM()">DM 시작하기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar toggle for mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // Subscription state (구독 상태)
+        let subscriptionState = {
+            '준형': true,
+            '민석': true,
+            '슬기': false,
+            '지훈': false,
+            '수진': false
+        };
+
+        // Last chat with (마지막 채팅한 선배)
+        let lastChatWith = '준형'; // 기본값
+        let currentChatWith = null; // 현재 채팅 중인 선배
+
+        // Profile data
+        const profileData = {
+            '준형': {
+                name: '준형 선배',
+                nickname: '@junhyung_pincette',
+                school: '서울대학교 치의학과 23학번',
+                instagram: '@junhyung_insta',
+                intro: '공부를 잘하려고 노력하다 보니, 이제는 배우는 방법을 함께 나누는 사람이 됐어요. 가르치면서도 매일 새로 배우는 걸 좋아하는 대학생이에요.',
+                interests: ['헤비메탈', '넷플릭스', '고양이', '헬스', '애니메이션', '아이스크림', '요리'],
+                image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=600&fit=crop&q=80'
+            },
+            '민석': {
+                name: '민석 선배',
+                nickname: '@minseok_pincette',
+                school: '서울대학교 치의학과 23학번',
+                instagram: '@minseok_insta',
+                intro: '학습의 즐거움을 함께 나누고 싶어요. 치의학을 공부하면서 느낀 점들을 여러분과 공유하고 싶습니다.',
+                interests: ['독서', '영화', '커피', '산책', '음악', '사진'],
+                image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=600&fit=crop&q=80'
+            },
+            '슬기': {
+                name: '슬기 선배',
+                nickname: '@seulgi_pincette',
+                school: '고려대학교 심리학과 22학번',
+                instagram: '@seulgi_insta',
+                intro: '심리학을 통해 사람을 이해하는 방법을 배우고 있어요. 공부 방법과 동기부여에 대해 함께 고민해봐요.',
+                interests: ['심리학', '요가', '일기쓰기', '차', '독서', '산책'],
+                image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=600&fit=crop&q=80'
+            },
+            '지훈': {
+                name: '지훈 선배',
+                nickname: '@jihoon_pincette',
+                school: '서울대학교 의예과 24학번',
+                instagram: '@jihoon_insta',
+                intro: '의학을 꿈꾸며 매일 공부하고 있어요. 함께 목표를 향해 달려가요!',
+                interests: ['의학', '운동', '게임', '드라마', '음악'],
+                image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop&q=80'
+            },
+            '수진': {
+                name: '수진 선배',
+                nickname: '@sujin_pincette',
+                school: '이화여대 교육학과 23학번',
+                instagram: '@sujin_insta',
+                intro: '교육에 대한 열정으로 가득한 대학생이에요. 함께 성장하는 즐거움을 나누고 싶어요.',
+                interests: ['교육', '아이들', '요리', '영화', '독서', '여행'],
+                image: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&h=600&fit=crop&q=80'
+            }
+        };
+
+        // Profile selection
+        function selectProfile(name) {
+            // Update active state
+            document.querySelectorAll('.community-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
+
+            // Check if subscribed
+            if (subscriptionState[name]) {
+                lastChatWith = name;
+                loadChatMessages(name);
+            } else {
+                openDM(name, getProfileTitle(name), getProfileImage(name));
+            }
+        }
+
+        // Get profile title
+        function getProfileTitle(name) {
+            const titles = {
+                '준형': '서울대 치의학과',
+                '민석': '서울대 치의학과',
+                '슬기': '고려대 심리학과',
+                '지훈': '서울대 의예과',
+                '수진': '이화여대 교육학과'
+            };
+            return titles[name] || '';
+        }
+
+        // Get profile image
+        function getProfileImage(name) {
+            const images = {
+                '준형': 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=600&fit=crop&q=80',
+                '민석': 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=600&fit=crop&q=80',
+                '슬기': 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=600&fit=crop&q=80',
+                '지훈': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop&q=80',
+                '수진': 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&h=600&fit=crop&q=80'
+            };
+            return images[name] || '';
+        }
+
+        // Load chat messages based on subscription
+        function loadChatMessages(name) {
+            const chatMessages = document.getElementById('chatMessages');
+            
+            if (subscriptionState[name]) {
+                // 구독한 경우: 실제 채팅 내용
+                const chatContents = {
+                    '준형': [
+                        { text: '안녕! 오늘 공부는 어때? 궁금한 거 있으면 언제든 물어봐 😊', time: '오후 2:30' },
+                        { text: '수학 문제 풀 때 시간 관리가 중요해. 타이머 켜고 연습해봐!', time: '오후 4:30' }
+                    ],
+                    '민석': [
+                        { text: '공부 좀 해~ 오늘 목표 달성했어?', time: '오후 3:15' },
+                        { text: '내일 시험 준비는 잘 되고 있어?', time: '오후 5:00' }
+                    ],
+                    '슬기': [
+                        { text: '안녕하세요! 심리학 공부에 관심이 있으시군요 😊', time: '오후 1:00' }
+                    ]
+                };
+
+                const messages = chatContents[name] || [{ text: '안녕! 오늘도 화이팅!', time: '방금 전' }];
+                
+                chatMessages.innerHTML = messages.map(msg => `
+                    <div class="message their-message">
+                        <div class="message-avatar" style="background: linear-gradient(135deg, #8b5cf6, #3b82f6);">${name.charAt(0)}</div>
+                        <div class="message-content">
+                            <div class="message-text">${msg.text}</div>
+                            <div class="message-time">${msg.time}</div>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                // 구독 안한 경우: 자기소개 메시지들
+                loadIntroMessages();
+            }
+            
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Load intro messages (구독 안한 경우)
+        function loadIntroMessages() {
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = `
+                <div class="message their-message">
+                    <div class="message-avatar" style="background: linear-gradient(135deg, #8b5cf6, #3b82f6);">준</div>
+                    <div class="message-content">
+                        <div class="message-text">다들 화이팅! 오늘도 열심히 공부하자 💪</div>
+                        <div class="message-time">오후 2:30</div>
+                    </div>
+                </div>
+
+                <div class="message their-message">
+                    <div class="message-avatar" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);">민</div>
+                    <div class="message-content">
+                        <div class="message-text">공부 좀 해~ 오늘 목표 달성했어?</div>
+                        <div class="message-time">오후 3:15</div>
+                    </div>
+                </div>
+
+                <div class="message their-message">
+                    <div class="message-avatar" style="background: linear-gradient(135deg, #3b82f6, #10b981);">P</div>
+                    <div class="message-content">
+                        <div class="message-text">새로운 학습 컨텐츠가 도착했어요! 확인해보세요 ✨</div>
+                        <div class="message-time">오후 4:00</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Open DM Modal
+        function openDM(name, title, imageUrl) {
+            const modal = document.getElementById('dmModal');
+            document.getElementById('dmProfileName').textContent = name + ' 선배';
+            document.getElementById('dmProfileSubtitle').textContent = title;
+            document.getElementById('dmProfileAvatar').src = imageUrl;
+            document.getElementById('dmAgree').checked = false;
+            toggleDMButton();
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close DM Modal
+        function closeDM() {
+            const modal = document.getElementById('dmModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Toggle DM button state
+        function toggleDMButton() {
+            const agree = document.getElementById('dmAgree').checked;
+            const btn = document.getElementById('dmStartBtn');
+            if (agree) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        }
+
+        // Start DM subscription
+        function startDM() {
+            const agree = document.getElementById('dmAgree').checked;
+            if (!agree) {
+                alert('유의사항에 동의해주세요.');
+                return;
+            }
+            
+            const name = document.getElementById('dmProfileName').textContent.replace(' 선배', '');
+            subscriptionState[name] = true;
+            lastChatWith = name;
+            
+            closeDM();
+            loadChatList(); // 채팅방 리스트 업데이트
+            alert('DM 구독이 시작되었습니다!');
+        }
+
+        // Open Profile Detail Modal
+        function openProfileDetail(name) {
+            const profile = profileData[name];
+            if (!profile) return;
+
+            document.getElementById('profileDetailImage').src = profile.image;
+            document.getElementById('profileDetailName').textContent = profile.name;
+            document.getElementById('profileDetailNickname').textContent = profile.nickname;
+            document.getElementById('profileDetailIntro').textContent = profile.intro;
+            document.getElementById('profileDetailSchool').textContent = profile.school;
+            document.getElementById('profileDetailInstagram').textContent = profile.instagram;
+
+            // 관심사 태그 생성
+            const interestsContainer = document.getElementById('profileDetailInterests');
+            interestsContainer.innerHTML = profile.interests.map(interest => 
+                `<div class="profile-detail-interest-tag">${interest}</div>`
+            ).join('');
+
+            // DM 버튼 표시/숨김
+            const dmBtn = document.getElementById('profileDetailDMBtn');
+            if (subscriptionState[name]) {
+                dmBtn.style.display = 'none';
+            } else {
+                dmBtn.style.display = 'block';
+                dmBtn.setAttribute('data-name', name);
+            }
+
+            document.getElementById('profileDetailModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close Profile Detail Modal
+        function closeProfileDetail() {
+            document.getElementById('profileDetailModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Open DM from Profile Detail
+        function openDMFromProfile() {
+            const name = document.getElementById('profileDetailDMBtn').getAttribute('data-name');
+            const profile = profileData[name];
+            if (profile) {
+                closeProfileDetail();
+                openDM(name, getProfileTitle(name), profile.image);
+            }
+        }
+
+        // Load Chat List
+        function loadChatList() {
+            const chatListItems = document.getElementById('chatListItems');
+            const subscribedProfiles = Object.keys(subscriptionState).filter(name => subscriptionState[name]);
+
+            if (subscribedProfiles.length === 0) {
+                chatListItems.innerHTML = `
+                    <div class="chat-list-empty">
+                        <div class="chat-list-empty-icon">💬</div>
+                        <div>구독한 Pacemaker가 없습니다.</div>
+                        <div style="margin-top: 8px; font-size: 13px; color: var(--text-tertiary);">Pacemaker를 구독하면 채팅할 수 있어요!</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const lastMessages = {
+                '준형': { text: '수학 문제 풀 때 시간 관리가 중요해. 타이머 켜고 연습해봐!', time: '오후 4:30' },
+                '민석': { text: '내일 시험 준비는 잘 되고 있어?', time: '오후 5:00' },
+                '슬기': { text: '안녕하세요! 심리학 공부에 관심이 있으시군요 😊', time: '오후 1:00' }
+            };
+
+            chatListItems.innerHTML = subscribedProfiles.map(name => {
+                const profile = profileData[name];
+                const lastMsg = lastMessages[name] || { text: '안녕! 오늘도 화이팅!', time: '방금 전' };
+                return `
+                    <div class="chat-list-item" onclick="openChat('${name}')">
+                        <img src="${profile.image}" alt="${profile.name}" class="chat-list-avatar">
+                        <div class="chat-list-info">
+                            <div class="chat-list-name">${profile.name}</div>
+                            <div class="chat-list-preview">${lastMsg.text}</div>
+                        </div>
+                        <div class="chat-list-time">${lastMsg.time}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Open Chat
+        function openChat(name) {
+            currentChatWith = name;
+            document.getElementById('chatListView').style.display = 'none';
+            document.getElementById('chatView').classList.add('active');
+            document.getElementById('chatViewTitle').textContent = profileData[name].name;
+            loadChatMessages(name);
+        }
+
+        // Back to Chat List
+        function backToChatList() {
+            document.getElementById('chatView').classList.remove('active');
+            document.getElementById('chatListView').style.display = 'flex';
+            currentChatWith = null;
+        }
+
+        // Initialize chat based on subscription
+        function initChat() {
+            loadChatList();
+        }
+
+        // Send message
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message && currentChatWith) {
+                const chatMessages = document.getElementById('chatMessages');
+                const newMessage = document.createElement('div');
+                newMessage.className = 'message my-message';
+                newMessage.innerHTML = `
+                    <div class="message-avatar" style="background: linear-gradient(135deg, #10b981, #3b82f6);">나</div>
+                    <div class="message-content">
+                        <div class="message-text">${message}</div>
+                        <div class="message-time">방금 전</div>
+                    </div>
+                `;
+                chatMessages.appendChild(newMessage);
+                input.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        // Handle Enter key press
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Scroll to top
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            initChat();
+        });
+
+        // Close sidebar when clicking outside (mobile)
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            
+            if (window.innerWidth <= 1024) {
+                if (!sidebar.contains(event.target) && !toggle.contains(event.target)) {
+                    sidebar.classList.remove('open');
+                }
+            }
+        });
+
+        // Close DM modal when clicking outside
+        document.getElementById('dmModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeDM();
+            }
+        });
+
+        // Close Profile Detail modal when clicking outside
+        document.getElementById('profileDetailModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeProfileDetail();
+            }
+        });
+
+        // Pin Shop functions
+        function openPinShop() {
+            document.getElementById('pinShopPage').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePinShop() {
+            document.getElementById('pinShopPage').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function openMyPin() {
+            openPinShop();
+        }
+
+        function switchPinTab(tab) {
+            // Update nav items
+            document.querySelectorAll('.pin-shop-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update content
+            const content = document.getElementById('pinShopContent');
+            if (tab === 'general') {
+                content.innerHTML = `
+                    <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 32px;">일반 충전</h2>
+                    <div class="pin-packages">
+                        <div class="pin-package-card" onclick="purchasePin(4, 1200)">
+                            <div class="pin-package-icons">
+                                <div class="pin-icon">P</div>
+                            </div>
+                            <div class="pin-package-name">Pin 4</div>
+                            <div class="pin-package-price">₩1,200</div>
+                        </div>
+                        <div class="pin-package-card" onclick="purchasePin(8, 2400)">
+                            <div class="pin-package-icons">
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                            </div>
+                            <div class="pin-package-name">Pin 8</div>
+                            <div class="pin-package-price">₩2,400</div>
+                        </div>
+                        <div class="pin-package-card" onclick="purchasePin(20, 6000)">
+                            <div class="pin-package-icons">
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                            </div>
+                            <div class="pin-package-name">Pin 20</div>
+                            <div class="pin-package-bonus">적립Pin 1</div>
+                            <div class="pin-package-price">₩6,000</div>
+                            <div class="pin-package-benefit">5% 혜택</div>
+                        </div>
+                        <div class="pin-package-card" onclick="purchasePin(40, 12000)">
+                            <div class="pin-package-icons">
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                            </div>
+                            <div class="pin-package-name">Pin 40</div>
+                            <div class="pin-package-bonus">적립Pin 3</div>
+                            <div class="pin-package-price">₩12,000</div>
+                            <div class="pin-package-benefit">7% 혜택</div>
+                        </div>
+                        <div class="pin-package-card" onclick="purchasePin(60, 18000)">
+                            <div class="pin-package-icons">
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                                <div class="pin-icon">P</div>
+                            </div>
+                            <div class="pin-package-name">Pin 60</div>
+                            <div class="pin-package-bonus">적립Pin 5</div>
+                            <div class="pin-package-price">₩18,000</div>
+                            <div class="pin-package-benefit">8% 혜택</div>
+                        </div>
+                    </div>
+                `;
+            } else if (tab === 'auto') {
+                content.innerHTML = `
+                    <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 32px;">자동 충전</h2>
+                    <div style="color: var(--text-secondary); line-height: 1.7;">
+                        <p>자동 충전 기능을 설정하면 Pin이 부족할 때 자동으로 충전됩니다.</p>
+                        <p style="margin-top: 16px;">자동 충전 설정 페이지가 곧 제공될 예정입니다.</p>
+                    </div>
+                `;
+            } else {
+                content.innerHTML = `
+                    <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 32px;">${tab === 'intro' ? '소개' : tab === 'inquiry' ? '조회' : 'FAQ'}</h2>
+                    <div style="color: var(--text-secondary); line-height: 1.7;">
+                        <p>이 기능은 곧 제공될 예정입니다.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function purchasePin(amount, price) {
+            if (confirm(`Pin ${amount}개를 ₩${price.toLocaleString()}에 구매하시겠습니까?`)) {
+                alert('구매가 완료되었습니다!');
+                // 실제로는 결제 처리 로직이 들어갑니다
+            }
+        }
+    </script>
+</body>
+</html>
+
